@@ -34,14 +34,14 @@ router.post('/register', (req, res) => {
       const avatar = gravatar.url(req.body.email, {
         s: '200', // Size
         r: 'pg', // Rating
-        d: 'mm', // Default
+        d: 'mm' // Default
       });
 
       const newUser = new User({
         name: req.body.name,
         email: req.body.email,
         avatar,
-        password: req.body.password,
+        password: req.body.password
       });
 
       bcrypt.genSalt(10, (err, salt) => {
@@ -53,7 +53,7 @@ router.post('/register', (req, res) => {
             .then((user) =>
               res.json({
                 success: true,
-                data: user,
+                data: user
               })
             )
             .catch((err) => console.log(err));
@@ -83,7 +83,7 @@ router.post('/login', (req, res) => {
       errors.email = 'User not found';
       return res.status(400).json({
         success: false,
-        email: errors,
+        email: errors
       });
     }
 
@@ -94,7 +94,7 @@ router.post('/login', (req, res) => {
         const payload = {
           id: user.id,
           name: user.name,
-          avatar: user.avatar,
+          avatar: user.avatar
         }; //Create JWT Payload
 
         // Sign Token
@@ -102,12 +102,12 @@ router.post('/login', (req, res) => {
           payload,
           secret,
           {
-            expiresIn: 3600,
+            expiresIn: 3600
           },
           (err, token) => {
             res.json({
               success: true,
-              token: 'Bearer ' + token,
+              token: 'Bearer ' + token
             });
           }
         );
@@ -115,7 +115,7 @@ router.post('/login', (req, res) => {
         errors.password = 'Password Incorrect';
         return res.status(400).json({
           success: false,
-          password: errors,
+          password: errors
         });
       }
     });
@@ -131,7 +131,7 @@ router.get(
     res.json({
       id: req.user.id,
       name: req.user.name,
-      email: req.user.email,
+      email: req.user.email
     });
   }
 );
