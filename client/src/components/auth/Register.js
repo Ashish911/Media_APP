@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Regiser = () => {
   const [user, setUser] = useState({
@@ -23,7 +24,10 @@ const Regiser = () => {
       password2
     };
 
-    console.log(newUser);
+    axios
+      .post('/api/users/register', newUser)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err.response.data));
   };
 
   return (
@@ -42,7 +46,6 @@ const Regiser = () => {
                   name='name'
                   value={name}
                   onChange={onChange}
-                  required
                 />
               </div>
               <div className='form-group'>
