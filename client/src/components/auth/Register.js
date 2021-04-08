@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
+import { registerUser } from '../../actions/authActions';
 
-const Regiser = () => {
-  const [user, setUser] = useState({
+const Register = ({ registerUser, auth }) => {
+  const [users, setUser] = useState({
     name: '',
     email: '',
     password: '',
     password2: '',
     errors: {}
   });
-  const { name, email, password, password2, errors } = user;
-  const onChange = (e) => setUser({ ...user, [e.target.name]: e.target.value });
+
+  const { name, email, password, password2, errors } = users;
+
+  const onChange = (e) =>
+    setUser({ ...users, [e.target.name]: e.target.value });
+
   const onSubmit = (e) => {
     e.preventDefault();
     const newUser = {
@@ -21,17 +27,21 @@ const Regiser = () => {
       password2
     };
 
-    console.log(newUser);
-    axios
-      .post('/api/users/register', newUser)
-      .then((res) => console.log(res.data))
-      .catch((err) =>
-        setUser({ name, email, password, password2, errors: err.response.data })
-      );
+    registerUser(newUser);
+
+    // axios
+    //   .post('/api/users/register', newUser)
+    //   .then((res) => console.log(res.data))
+    //   .catch((err) =>
+    //     setUser({ name, email, password, password2, errors: err.response.data })
+    //   );
   };
+
+  const { user } = auth;
 
   return (
     <div className='register'>
+      {user ? user.name : null}
       <div className='container'>
         <div className='row'>
           <div className='col-md-8 m-auto'>
@@ -110,4 +120,14 @@ const Regiser = () => {
     </div>
   );
 };
-export default Regiser;
+
+Register.propTypes = {
+  registerUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+const mapStateToProps = (state) => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps, { registerUser })(Register);
