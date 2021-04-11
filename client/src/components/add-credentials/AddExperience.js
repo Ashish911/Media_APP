@@ -26,6 +26,12 @@ class AddExperience extends Component {
     this.onCheck = this.onCheck.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
@@ -39,7 +45,7 @@ class AddExperience extends Component {
       description: this.state.description
     };
 
-    console.log(expData);
+    this.props.addExperience(expData, this.props.history);
   }
 
   onChange(e) {
